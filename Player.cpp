@@ -28,11 +28,12 @@ void Player::Initialize(Model* model, KamataEngine::Camera* camera, const Vector
 	worldTransform_.translation_ = position;
 	objectColor_.Initialize();
 	camera_ = camera;
+	bulletMode_ = Model::CreateFromOBJ("Bullet");
 }
 
 void Player::Update() {
 	wolk();
-	Rotate();
+	//Rotate();
 	Attack();
 
 	// デスフラグの立った弾を削除
@@ -66,10 +67,18 @@ void Player::wolk() {
 		move.x += kCharacterSpeed;
 	}
 
+	if (input_->PushKey(DIK_A) && input_->PushKey(DIK_D)) {
+		move.x = 0.0f;
+	}
+
 	if (input_->PushKey(DIK_S)) {
 		move.y -= kCharacterSpeed;
 	} else if (input_->PushKey(DIK_W)) {
 		move.y += kCharacterSpeed;
+	}
+
+	if (input_->PushKey(DIK_S) && input_->PushKey(DIK_W)) {
+		move.y = 0.0f;
 	}
 
 	worldTransform_.translation_ += move;
@@ -88,7 +97,7 @@ void Player::Rotate() {
 }
 
 void Player::Attack() {
-	if (input_->PushKey(DIK_SPACE)) {
+	if (input_->PushKey(DIK_SPACE) && !isAttack_) {
 
 		// 弾の速度
 		const float kBulletSpeed = 1.0f;
@@ -99,10 +108,17 @@ void Player::Attack() {
 
 		// 弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, GetWorldPosition(), velocity);
+		newBullet->Initialize(bulletMode_, GetWorldPosition(), velocity);
 
 		// 弾を登録する
 		bullets_.push_back(newBullet);
+		isAttack_ = true;
+	} else if (isAttack_) {
+		delayTimer_ += 1.0f / 60;
+		if (delayTimer_ >= delayTime) { 
+			isAttack_ = false; 
+			delayTimer_ = 0.0f;
+		}
 	}
 }
 

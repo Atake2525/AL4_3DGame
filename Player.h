@@ -55,6 +55,8 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 	KamataEngine::ObjectColor objectColor_;
 
+	KamataEngine::Model* bulletMode_ = nullptr;
+
 	void Move();
 	void wolk();
 	void Rotate();
@@ -73,5 +75,12 @@ private:
 	// 弾
 	std::list<PlayerBullet*> bullets_;
 	void Attack();
+
+	// 攻撃したかどうか
+	bool isAttack_ = false;
+	// 攻撃間隔
+	float delayTimer_ = 0.0f;
+	float delayTime = 0.2f;
+
 
 };

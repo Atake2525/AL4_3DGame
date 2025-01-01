@@ -18,11 +18,14 @@ Vector3 Enemy::GetWorldPosition() {
 	return worldPos;
 }
 
-void Enemy::Initialize(Model* model, const Vector3& position) { 
+void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& velocity) { 
 	assert(model);
 	model_ = model;
 
 	textureHandle_ = TextureManager::Load("uvChecker.png");
+	modelBullet_ = Model::CreateFromOBJ("Bullet");
+
+	ApproachVelocity = velocity;
 	
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
@@ -54,7 +57,7 @@ void Enemy::Fire() {
 
 	// 弾を生成し、初期化
 	EnemyBullet* newBullet = new EnemyBullet();
-	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+	newBullet->Initialize(modelBullet_, worldTransform_.translation_, velocity);
 
 	// 弾を登録する
 	gameScene_->AddEnemyBullet(newBullet);
