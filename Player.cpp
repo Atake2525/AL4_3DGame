@@ -71,7 +71,7 @@ void Player::wolk() {
 		move.x = 0.0f;
 	}
 
-	if (input_->PushKey(DIK_S)) {
+	/*if (input_->PushKey(DIK_S)) {
 		move.y -= kCharacterSpeed;
 	} else if (input_->PushKey(DIK_W)) {
 		move.y += kCharacterSpeed;
@@ -79,7 +79,7 @@ void Player::wolk() {
 
 	if (input_->PushKey(DIK_S) && input_->PushKey(DIK_W)) {
 		move.y = 0.0f;
-	}
+	}*/
 
 	worldTransform_.translation_ += move;
 	// 範囲を超えないように処理

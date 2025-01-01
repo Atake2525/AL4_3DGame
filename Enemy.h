@@ -51,11 +51,16 @@ public:
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
+	bool GetIsDead() { return isDead_; }
+
 private:
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Model* model_ = nullptr;
 
 	KamataEngine::Model* modelBullet_ = nullptr;
+
+	float hp_ = 100.0f;
+	bool isDead_ = false;
 
 	// ゲームシーン
 	GameScene* gameScene_ = nullptr;

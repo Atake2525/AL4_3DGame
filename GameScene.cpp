@@ -15,6 +15,9 @@ GameScene::~GameScene() {
 		delete enemyBullet;
 	}
 	delete debugCamera_;
+	delete skyDome_;
+	delete ground_;
+	delete object_;
 }
 
 void GameScene::Initialize() {
@@ -55,6 +58,8 @@ void GameScene::Initialize() {
 	ground_ = new Ground();
 	ground_->Initialize(modelGround_);
 
+	object_ = new Object();
+	object_->Initialize();
 
 	worldTransform_.Initialize();
 	camera_.farZ = 20000.0f;
@@ -81,6 +86,7 @@ void GameScene::Update() {
 	}
 	skyDome_->Update();
 	ground_->Update();
+	object_->Update();
 	CheckAllCollisions();
 
 #ifdef _DEBUG
@@ -133,6 +139,7 @@ void GameScene::Draw() {
 	/// </summary>
 	skyDome_->Draw(worldTransform_, camera_);
 	ground_->Draw(worldTransform_, camera_);
+	object_->Draw(worldTransform_, camera_);
 	player_->Draw(camera_);
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw(camera_);

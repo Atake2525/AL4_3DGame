@@ -35,6 +35,10 @@ void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& vel
 void Enemy::Update() { 
 	// デスフラグの立った弾を削除
 	movePhase();
+
+	if (hp_ <= 0) {
+		isDead_ = true;
+	}
 	//worldTransform_.translation_ -= velocity_;
 	worldTransform_.UpdateMatirx();
 }
@@ -94,6 +98,6 @@ void Enemy::Draw(Camera& camera) {
 	model_->Draw(worldTransform_, camera, textureHandle_); 
 }
 
-void Enemy::OnCollision() {
-	return; 
+void Enemy::OnCollision() { 
+	hp_ -= 10.0f;
 }

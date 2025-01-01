@@ -72,7 +72,7 @@ bool RailCamera::RotateAmount(Vector3 rotatePoint, float rotateTime) {
 
 void RailCamera::Move() {
 	if (moveStage == 0) {
-		if (MoveAmount(Vector3{0.0f, 0.0f, 200.0f}, 20.0f)) {
+		if (MoveAmount(Vector3{0.0f, 0.0f, 1500.0f}, 30.0f)) {
 			moveStage = 1;
 		}
 	}
