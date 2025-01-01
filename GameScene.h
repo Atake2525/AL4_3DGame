@@ -17,8 +17,10 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Skydome.h"
+#include "ground.h"
 #include "RailCamera.h"
 #include "EnemyBullet.h"
+#include "3d/LightGroup.h"
 #include <sstream>
 
 /// <summary>
@@ -88,6 +90,8 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 	KamataEngine::Model* modelPlayer_ = nullptr;
 
+	KamataEngine::Model* modelObject_ = nullptr;
+
 	std::list<Enemy*> enemies_;
 	KamataEngine::Model* modelEnemy_ = nullptr;
 
@@ -99,6 +103,10 @@ private: // メンバ変数
 	// 天球
 	Skydome* skyDome_ = nullptr;
 	KamataEngine::Model* modelSkydome_ = nullptr;
+
+	// 地面
+	Ground* ground_ = nullptr;
+	KamataEngine::Model* modelGround_ = nullptr;
 
 	// レールカメラ
 	RailCamera* railCamera_ = nullptr;

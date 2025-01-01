@@ -10,6 +10,7 @@
 #include <2d\Sprite.h>
 #include <base\TextureManager.h>
 #include "3d/ObjectColor.h"
+#include "3d/LightGroup.h"
 
 class PlayerBullet {
 public:

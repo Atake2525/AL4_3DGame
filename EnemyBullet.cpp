@@ -14,7 +14,7 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
-	worldTransform_.scale_ = {0.5f, 0.5f, 0.5f};
+	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
 	worldTransform_.UpdateMatirx();
 	velocity_ = velocity;
 }

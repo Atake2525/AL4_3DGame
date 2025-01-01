@@ -50,8 +50,14 @@ void GameScene::Initialize() {
 	skyDome_ = new Skydome();
 	skyDome_->Initialize(modelSkydome_);
 
+	// 地面の初期化
+	modelGround_ = Model::CreateFromOBJ("ground");
+	ground_ = new Ground();
+	ground_->Initialize(modelGround_);
+
 
 	worldTransform_.Initialize();
+	camera_.farZ = 20000.0f;
 	camera_.Initialize();
 }
 
@@ -74,6 +80,7 @@ void GameScene::Update() {
 		enemyBullet->Update();
 	}
 	skyDome_->Update();
+	ground_->Update();
 	CheckAllCollisions();
 
 #ifdef _DEBUG
@@ -125,6 +132,7 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	skyDome_->Draw(worldTransform_, camera_);
+	ground_->Draw(worldTransform_, camera_);
 	player_->Draw(camera_);
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw(camera_);
@@ -296,10 +304,22 @@ void GameScene::UpdateEnemyPopCommands() {
 			std::getline(line_stream, word, ',');
 			float z = (float)std::stof(word.c_str());
 
+			// 移動量のx座標
+			std::getline(line_stream, word, ',');
+			float velx = (float)std::atof(word.c_str());
+
+			// 移動量のy座標
+			std::getline(line_stream, word, ',');
+			float vely = (float)std::atof(word.c_str());
+
+			// 移動量のz座標
+			std::getline(line_stream, word, ',');
+			float velz = (float)std::atof(word.c_str());
+
 			// 敵を発生させる
 			Enemy* enemy = new Enemy();
 			enemy->SetPlayer(player_);
-			enemy->Initialize(modelEnemy_, Vector3{ x, y, z });
+			enemy->Initialize(modelEnemy_, Vector3{x, y, z}, Vector3{velx, vely, velz});
 			enemy->SetGameScene(this);
 			enemies_.push_back(enemy);
 

@@ -27,7 +27,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position);
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -55,19 +55,21 @@ private:
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Model* model_ = nullptr;
 
+	KamataEngine::Model* modelBullet_ = nullptr;
+
 	// ゲームシーン
 	GameScene* gameScene_ = nullptr;
 
 	uint32_t textureHandle_ = 0;
 
 	// 移動速度
-	KamataEngine::Vector3 velocity_ = {0.0f, 0.0f, 0.02f};
+	KamataEngine::Vector3 velocity_ = {0.0f, 0.0f, 0.08f};
 
 
 	// 行動
 	void movePhase();
 	Phase phase_ = Phase::Approach;
-	KamataEngine::Vector3 ApproachVelocity = {0.0f, 0.0f, -0.02f};
+	KamataEngine::Vector3 ApproachVelocity = {0.0f, 0.0f, 0.0f};
 	KamataEngine::Vector3 LeaveVelocity = {-0.1f, 0.05f, 0.02f};
 
 	/// <summary>

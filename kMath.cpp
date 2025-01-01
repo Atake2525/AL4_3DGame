@@ -1,4 +1,5 @@
 ﻿#include "kMath.h"
+#include "algorithm"
 using namespace KamataEngine;
 
 // Vector3の足し算
@@ -59,8 +60,11 @@ const Vector3 operator*(const Vector3& v, float s) {
 };
 
 // ease In-Out
+// x1 start
+// x2 end
 float easeInOut(float t, float x1, float x2) {
 	float x;
+	t = std::clamp(t, 0.0f, 1.0f);
 	// easeOut
 	float easedT = -(cos(float(M_PI * t)) - 1.0f) / 2.0f;
 

@@ -19,6 +19,12 @@ public:
 
 	const KamataEngine::WorldTransform& GetWorldTransform() { return worldTransform_; }
 
+	bool MoveAmount(KamataEngine::Vector3 movePoint, float moveTime);
+
+	bool RotateAmount(KamataEngine::Vector3 rotatePoint, float rotateTime);
+
+	void Move();
+
 private:
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
@@ -28,4 +34,17 @@ private:
 	KamataEngine::Vector3 translation_ = {0.0f, 0.0f, 0.0f};
 
 	KamataEngine::Vector3 rotation_ = {0.0f, 0.0f, 0.0f};
+
+	// カメラ移動
+	// 平行移動, 回転に必要な宣言
+	float moveTimer_ = 0.0f;
+	float rotateTimer_ = 0.0f;
+
+	bool isCheckTranslate_ = false;
+	bool isCheckRotate_ = false;
+
+	KamataEngine::Vector3 firstPos_ = {0.0f, 0.0f, 0.0f};
+	KamataEngine::Vector3 firstRotate_ = {0.0f, 0.0f, 0.0f};
+
+	int moveStage = 0;
 };
