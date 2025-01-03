@@ -3,19 +3,20 @@
 
 using namespace KamataEngine;
 
-void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) { 
+void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity, const Vector3& rotate) { 
 	// NULLポインタチェック
 	assert(model);
 
 	model_ = model;
 	
 	objectColor_.Initialize();
-	objectColor_.SetColor(Vector4{0.0f, 255.0f, 0.0f, 1.0f});
+	objectColor_.SetColor(Vector4{255.0f, 255.0f, 255.0f, 1.0f});
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 
 	velocity_ = velocity;
+	worldTransform_.rotation_ = rotate;
 }
 
 void PlayerBullet::Update() { 

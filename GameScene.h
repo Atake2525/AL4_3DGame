@@ -22,6 +22,7 @@
 #include "EnemyBullet.h"
 #include "3d/LightGroup.h"
 #include <sstream>
+#include "Object.h"
 
 /// <summary>
 /// ゲームシーン
@@ -90,7 +91,10 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 	KamataEngine::Model* modelPlayer_ = nullptr;
 
-	KamataEngine::Model* modelObject_ = nullptr;
+	Object* object_ = nullptr;
+
+	KamataEngine::ObjectColor black_;
+	KamataEngine::ObjectColor white_;
 
 	std::list<Enemy*> enemies_;
 	KamataEngine::Model* modelEnemy_ = nullptr;

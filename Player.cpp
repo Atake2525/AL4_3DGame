@@ -52,9 +52,11 @@ void Player::Update() {
 	//worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
 	//worldTransform_.TransferMatrix();
+#ifdef _DEBUG
 	ImGui::Begin("PlayerState");
 	ImGui::DragFloat3("pos", &worldTransform_.translation_.x, 0.1f);
 	ImGui::End();
+#endif // _DEBUG
 }
 
 void Player::wolk() { 
@@ -71,7 +73,7 @@ void Player::wolk() {
 		move.x = 0.0f;
 	}
 
-	if (input_->PushKey(DIK_S)) {
+	/*if (input_->PushKey(DIK_S)) {
 		move.y -= kCharacterSpeed;
 	} else if (input_->PushKey(DIK_W)) {
 		move.y += kCharacterSpeed;
@@ -79,7 +81,7 @@ void Player::wolk() {
 
 	if (input_->PushKey(DIK_S) && input_->PushKey(DIK_W)) {
 		move.y = 0.0f;
-	}
+	}*/
 
 	worldTransform_.translation_ += move;
 	// 範囲を超えないように処理
@@ -100,7 +102,7 @@ void Player::Attack() {
 	if (input_->PushKey(DIK_SPACE) && !isAttack_) {
 
 		// 弾の速度
-		const float kBulletSpeed = 1.0f;
+		const float kBulletSpeed = 2.0f;
 		Vector3 velocity(0, 0, kBulletSpeed);
 
 		// 速度ベクトルを自機の向きに合わせて回転させる
@@ -108,7 +110,7 @@ void Player::Attack() {
 
 		// 弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(bulletMode_, GetWorldPosition(), velocity);
+		newBullet->Initialize(bulletMode_, GetWorldPosition(), velocity, worldTransform_.parent_->rotation_);
 
 		// 弾を登録する
 		bullets_.push_back(newBullet);

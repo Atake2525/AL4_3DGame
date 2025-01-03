@@ -66,3 +66,5 @@ KamataEngine::Vector3 Normalize(const KamataEngine::Vector3& v);
 // 逆行列
 // 逆行列
 KamataEngine::Matrix4x4 Inverse(const KamataEngine::Matrix4x4& m);
+
+float Length(KamataEngine::Vector3 v);

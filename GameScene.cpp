@@ -15,6 +15,9 @@ GameScene::~GameScene() {
 		delete enemyBullet;
 	}
 	delete debugCamera_;
+	delete skyDome_;
+	delete ground_;
+	delete object_;
 }
 
 void GameScene::Initialize() {
@@ -26,7 +29,11 @@ void GameScene::Initialize() {
 	debugCamera_ = new DebugCamera(1280, 720);
 
 	// 軸方向表示の表示を有効にする
+	AxisIndicator::GetInstance()->SetVisible(false);
+#ifdef _DEBUG
 	AxisIndicator::GetInstance()->SetVisible(true);
+#endif // _DEBUG
+
 	// 軸方向表示が参照するカメラを指定する(アドレス無し)
 	AxisIndicator::GetInstance()->SetTargetCamera(&camera_);
 
@@ -55,6 +62,13 @@ void GameScene::Initialize() {
 	ground_ = new Ground();
 	ground_->Initialize(modelGround_);
 
+	object_ = new Object();
+	object_->Initialize();
+
+	black_.Initialize();
+	black_.SetColor(Vector4{0.0f, 0.0f, 0.0f, 1.0f});
+	white_.Initialize();
+	white_.SetColor(Vector4{255.0f, 255.0f, 255.0f, 1.0f});
 
 	worldTransform_.Initialize();
 	camera_.farZ = 20000.0f;
@@ -65,6 +79,13 @@ void GameScene::Update() {
 	railCamera_->Update();
 	player_->Update();
 	UpdateEnemyPopCommands();
+	enemies_.remove_if([](Enemy* enemy) {
+		if (enemy->IsDead()) {
+			delete enemy;
+			return true;
+		}
+		return false;
+	});
 	for (Enemy* enemy : enemies_) {
 		enemy->Update();
 	}
@@ -81,6 +102,7 @@ void GameScene::Update() {
 	}
 	skyDome_->Update();
 	ground_->Update();
+	object_->Update();
 	CheckAllCollisions();
 
 #ifdef _DEBUG
@@ -131,11 +153,12 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	skyDome_->Draw(worldTransform_, camera_);
-	ground_->Draw(worldTransform_, camera_);
+	skyDome_->Draw(worldTransform_, camera_, &black_);
+	ground_->Draw(worldTransform_, camera_, &black_);
+	object_->Draw(worldTransform_, camera_);
 	player_->Draw(camera_);
 	for (Enemy* enemy : enemies_) {
-		enemy->Draw(camera_);
+		enemy->Draw(camera_, &white_);
 	}
 	for (EnemyBullet* enemyBullet : enemyBullets_) {
 		enemyBullet->Draw(camera_);
@@ -208,7 +231,9 @@ void GameScene::CheckAllCollisions() {
 			// 弾と弾の交差
 			if (dist <= len) {
 				// 敵キャラの衝突コールバックを呼び出す
-				enemy->OnCollision();
+				if (!enemy->IsDamage()) {
+					enemy->OnCollision();
+				}
 				// 自弾の衝突コールバックを呼び出す
 				bullet->OnCollision();
 			}

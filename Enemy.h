@@ -35,14 +35,14 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(KamataEngine::Camera& camera);
+	void Draw(KamataEngine::Camera& camera, KamataEngine::ObjectColor* objectColor);
 
 	void SetPlayer(Player* player) { player_ = player; }
 
 	KamataEngine::Vector3 GetWorldPosition();
 
 	// 発射間隔
-	static const int kFireInterval = 60;
+	static const int kFireInterval = 120;
 
 	void InitializeFirePhase();
 
@@ -51,11 +51,32 @@ public:
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
+	bool IsDead() { return isDead_; }
+
+	bool IsDamage() { return isDamage_; }
+
 private:
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Model* model_ = nullptr;
 
 	KamataEngine::Model* modelBullet_ = nullptr;
+
+	// HP
+	float hp_ = 100.0f;
+	// 生きているかのフラグ
+	bool isDead_ = false;
+
+	// ダメージを受けたかどうか
+	bool isDamage_ = false;
+	// ダメージを受けた後の無敵時間
+	float damageDelayTime_ = 1.0f;
+	float damageDelayTimer_ = 0.0f;
+
+	float searchDamataDelayTimer_ = 0.0f;
+	// ダメージを受けた時に敵を描画する時間
+	int inDamageDrawCount_ = 1;
+	// カウンター
+	uint8_t inDamageDrawCounter_ = 0;
 
 	// ゲームシーン
 	GameScene* gameScene_ = nullptr;

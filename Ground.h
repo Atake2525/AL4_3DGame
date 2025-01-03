@@ -17,7 +17,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(KamataEngine::WorldTransform& worldTransform, KamataEngine::Camera& camera);
+	void Draw(KamataEngine::WorldTransform& worldTransform, KamataEngine::Camera& camera, KamataEngine::ObjectColor* objectColor);
 
 private:
 	KamataEngine::Model* model_;

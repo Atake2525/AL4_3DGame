@@ -7,18 +7,20 @@
 class Object {
 public:
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize();
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw(KamataEngine::WorldTransform& worldTransform, KamataEngine::Camera& camera);
 
 private:
-	KamataEngine::Model* model_;
+	KamataEngine::Model* caveModel_;
+	KamataEngine::Model* mountainModel_;
+
 };
