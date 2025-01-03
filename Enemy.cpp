@@ -18,12 +18,14 @@ Vector3 Enemy::GetWorldPosition() {
 	return worldPos;
 }
 
-void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& velocity) { 
+void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& velocity, float delTime) { 
 	assert(model);
 	model_ = model;
 
 	textureHandle_ = TextureManager::Load("uvChecker.png");
 	modelBullet_ = Model::CreateFromOBJ("Bullet");
+
+	delTime_ = delTime;
 
 	ApproachVelocity = velocity;
 	
@@ -35,6 +37,12 @@ void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& vel
 void Enemy::Update() { 
 	// デスフラグの立った弾を削除
 	movePhase();
+	moveStage_ = railCamera_->GetMoveStage();
+
+	delTime_--;
+	if (delTime_ <= 0.0f) {
+		isDelete_ = true;
+	}
 
 	// ダメージを受けたら実行
 	if (isDamage_) {
@@ -68,14 +76,22 @@ void Enemy::Fire() {
 	Vector3 EmWorldPos = GetWorldPosition();
 
 	Vector3 BulletWorldPos = plWorldPos - EmWorldPos;
-	plWorldPos.z -= BulletWorldPos.z / 2;
+	if (moveStage_ == 0) {
+		plWorldPos.z -= BulletWorldPos.z / 2;
+	} else if (moveStage_ == 1) {
+		plWorldPos.x -= BulletWorldPos.x / 2;
+	} else if (moveStage_ == 2) {
+		plWorldPos.z -= BulletWorldPos.z / 2;
+	} else if (moveStage_ == 3) {
+		plWorldPos.x -= BulletWorldPos.x / 2;
+	}
 	BulletWorldPos = plWorldPos - EmWorldPos;
 	BulletWorldPos = Normalize(BulletWorldPos);
 	Vector3 velocity = BulletWorldPos * kBulletSpeed;
 
 	// 弾を生成し、初期化
 	EnemyBullet* newBullet = new EnemyBullet();
-	newBullet->Initialize(modelBullet_, worldTransform_.translation_, velocity);
+	newBullet->Initialize(modelBullet_, worldTransform_.translation_, velocity, railCamera_->GetWorldTransform().rotation_);
 
 	// 弾を登録する
 	gameScene_->AddEnemyBullet(newBullet);
@@ -121,6 +137,6 @@ void Enemy::Draw(Camera& camera, ObjectColor* objectColor) {
 }
 
 void Enemy::OnCollision() { 
-	hp_ -= 10.0f;
+	hp_ -= 35.0f;
 	isDamage_ = true;
 }
