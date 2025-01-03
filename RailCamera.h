@@ -4,6 +4,8 @@
 #include "math/MathUtility.h"
 #include "kMath.h"
 
+class GameScene;
+
 class RailCamera {
 public:
 	/// <summary>
@@ -33,11 +35,15 @@ public:
 
 	KamataEngine::Vector3 TranslationAmountVoid(KamataEngine::Vector3 translationPoint, float translationTime);
 
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
 	int GetMoveStage() { return moveStage_; }
 
 	void Move();
 
 private:
+	GameScene* gameScene_ = nullptr;
+
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
 	// カメラ
@@ -54,6 +60,7 @@ private:
 	void ResetTranslation() { translationEnd_ = false; }
 	void ResetRotateTranslation() { rotateTrasnlationEnd_ = false; }
 	void ResetAllAmount();
+
 
 	// カメラ移動
 	// 平行移動, 回転に必要な宣言
@@ -77,4 +84,6 @@ private:
 	KamataEngine::Vector3 firstTranslation_ = {0.0f, 0.0f, 0.0f};
 
 	int moveStage_ = 0;
+
+	bool finish_ = false;
 };

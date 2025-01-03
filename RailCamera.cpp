@@ -1,6 +1,7 @@
 #include "RailCamera.h"
 #include "imgui.h"
 #include "kMath.h"
+#include "GameScene.h"
 
 using namespace KamataEngine;
 
@@ -14,6 +15,7 @@ void RailCamera::Initialize(const WorldTransform& worldTransform) {
 }
 
 void RailCamera::Update() { 
+	finish_ = gameScene_->IsComplete();
 
 	Move();
 
@@ -211,25 +213,27 @@ void RailCamera::ResetAllAmount() {
 }
 
 void RailCamera::Move() { 
-	if (moveStage_ == 0) {
-		if (translation_.z >= 1770.2f && RotateTranslationAmount(Vector3{0.0f, -90.0f, 0.0f}, Vector3{-1.0f, 0.0f, 0.0f}, 1.0f)) {
-			moveStage_ = 1;
-			ResetAllAmount();
-		}
-	}else if (moveStage_ == 1) {
-		if (translation_.x <= -1770.2f && RotateTranslationAmount(Vector3{0.0f, -90.0f, 0.0f}, Vector3{0.0f, 0.0f, -1.0f}, 1.0f)) {
-			moveStage_ = 2;
-			ResetAllAmount();
-		}
-	} else if (moveStage_ == 2) {
-		if (translation_.z <= 29.8f && RotateTranslationAmount(Vector3{0.0f, -90.0f, 0.0f}, Vector3{1.0f, 0.0f, 0.0f}, 1.0f)) {
-			moveStage_ = 3;
-			ResetAllAmount();
-		}
-	} else if (moveStage_ == 3) {
-		if (translation_.x >= -29.8f && RotateTranslationAmount(Vector3{0.0f, -90.0f, 0.0f}, Vector3{0.0f, 0.0f, 1.0f}, 1.0f)) {
-			moveStage_ = 0;
-			ResetAllAmount();
+	if (!finish_) {
+		if (moveStage_ == 0) {
+			if (translation_.z >= 1770.2f && RotateTranslationAmount(Vector3{0.0f, -90.0f, 0.0f}, Vector3{-1.0f, 0.0f, 0.0f}, 1.0f)) {
+				moveStage_ = 1;
+				ResetAllAmount();
+			}
+		} else if (moveStage_ == 1) {
+			if (translation_.x <= -1770.2f && RotateTranslationAmount(Vector3{0.0f, -90.0f, 0.0f}, Vector3{0.0f, 0.0f, -1.0f}, 1.0f)) {
+				moveStage_ = 2;
+				ResetAllAmount();
+			}
+		} else if (moveStage_ == 2) {
+			if (translation_.z <= 29.8f && RotateTranslationAmount(Vector3{0.0f, -90.0f, 0.0f}, Vector3{1.0f, 0.0f, 0.0f}, 1.0f)) {
+				moveStage_ = 3;
+				ResetAllAmount();
+			}
+		} else if (moveStage_ == 3) {
+			if (translation_.x >= -29.8f && RotateTranslationAmount(Vector3{0.0f, -90.0f, 0.0f}, Vector3{0.0f, 0.0f, 1.0f}, 1.0f)) {
+				moveStage_ = 0;
+				ResetAllAmount();
+			}
 		}
 	}
 		translation_ += moveTranslation_;

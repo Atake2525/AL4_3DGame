@@ -47,6 +47,7 @@ void GameScene::Initialize() {
 	// レールカメラ
 	railCamera_ = new RailCamera();
 	railCamera_->Initialize(player_->GetWorldTransform());
+	railCamera_->SetGameScene(this);
 	// 自キャラとレールカメラの親子関係を結ぶ
 	player_->SetParent(&railCamera_->GetWorldTransform());
 
@@ -83,7 +84,7 @@ void GameScene::Update() {
 	UpdateEnemyPopCommands();
 	for (Enemy* enemy : enemies_) {
 		if (enemy->IsDead()) {
-			killCount++;
+			killCounter_++;
 		}
 	}
 	enemies_.remove_if([](Enemy* enemy) {
@@ -95,6 +96,9 @@ void GameScene::Update() {
 	});
 	for (Enemy* enemy : enemies_) {
 		enemy->Update();
+	}
+	if (killCounter_ >= killCount_) {
+		complete_ = true;
 	}
 	// デスフラグの立った弾を削除
 	enemyBullets_.remove_if([](EnemyBullet* bullet) {
@@ -117,7 +121,7 @@ void GameScene::Update() {
 		isDebugCameraActive_ = !isDebugCameraActive_;
 	}
 	ImGui::Begin("killCount");
-	ImGui::DragInt("Count", &killCount, 1.0f);
+	ImGui::DragInt("Count", &killCounter_, 1.0f);
 	ImGui::End();
 #endif // DEBUG
 	if (isDebugCameraActive_) {
