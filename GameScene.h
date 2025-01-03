@@ -93,6 +93,9 @@ private: // メンバ変数
 
 	Object* object_ = nullptr;
 
+	KamataEngine::ObjectColor black_;
+	KamataEngine::ObjectColor white_;
+
 	std::list<Enemy*> enemies_;
 	KamataEngine::Model* modelEnemy_ = nullptr;
 

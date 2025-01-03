@@ -284,3 +284,8 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 
 	return ans;
 };
+
+float Length(Vector3 v) { 
+	float result = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+	return result;
+}

@@ -36,6 +36,18 @@ void Enemy::Update() {
 	// デスフラグの立った弾を削除
 	movePhase();
 
+	// ダメージを受けたら実行
+	if (isDamage_) {
+		damageDelayTimer_ += 1.0f / 60 / damageDelayTime_ * 10.0f;
+		if (damageDelayTimer_ >= 10.0f) {
+			isDamage_ = false;
+			damageDelayTimer_ = 0.0f;
+			inDamageDrawCounter_ = 0;
+		}
+		inDamageDrawCounter_ += 1;
+	}
+
+	// HPが0になったら実行
 	if (hp_ <= 0) {
 		isDead_ = true;
 	}
@@ -56,6 +68,8 @@ void Enemy::Fire() {
 	Vector3 EmWorldPos = GetWorldPosition();
 
 	Vector3 BulletWorldPos = plWorldPos - EmWorldPos;
+	plWorldPos.z -= BulletWorldPos.z / 2;
+	BulletWorldPos = plWorldPos - EmWorldPos;
 	BulletWorldPos = Normalize(BulletWorldPos);
 	Vector3 velocity = BulletWorldPos * kBulletSpeed;
 
@@ -82,10 +96,12 @@ void Enemy::movePhase() {
 		worldTransform_.translation_ += LeaveVelocity;
 		break;
 	}
-	fireTimer_--;
-	if (fireTimer_ == 0) {
-		Fire();
-		fireTimer_ = kFireInterval;
+	if (!isDamage_) {
+		fireTimer_--;
+		if (fireTimer_ == 0) {
+			Fire();
+			fireTimer_ = kFireInterval;
+		}
 	}
 }
 
@@ -94,10 +110,17 @@ void Enemy::InitializeFirePhase() {
 	fireTimer_ = kFireInterval;
 }
 
-void Enemy::Draw(Camera& camera) {
-	model_->Draw(worldTransform_, camera, textureHandle_); 
+void Enemy::Draw(Camera& camera, ObjectColor* objectColor) {
+	if (isDamage_) {
+		if (inDamageDrawCount_ & inDamageDrawCounter_) {
+			model_->Draw(worldTransform_, camera, objectColor); 
+		}
+	} else {
+		model_->Draw(worldTransform_, camera, objectColor);
+	}
 }
 
 void Enemy::OnCollision() { 
 	hp_ -= 10.0f;
+	isDamage_ = true;
 }

@@ -12,4 +12,4 @@ void Ground::Update() {
 
 }
 
-void Ground::Draw(WorldTransform& worldTransform, Camera& camera) { model_->Draw(worldTransform, camera); }
+void Ground::Draw(WorldTransform& worldTransform, Camera& camera, ObjectColor* objectColor) { model_->Draw(worldTransform, camera, objectColor); }
