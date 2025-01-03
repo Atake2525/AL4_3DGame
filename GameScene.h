@@ -79,6 +79,8 @@ public: // メンバ関数
 
 	bool IsFinished() const { return finished_; }
 
+	bool IsComplete() const { return complete_; }
+
 private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
 	KamataEngine::Input* input_ = nullptr;
@@ -121,7 +123,12 @@ private: // メンバ変数
 	// 敵発生コマンド
 	std::stringstream enemyPopCommands;
 
-	int killCount = 0;
+	// 敵のキルカウント
+	int killCounter_ = 0;
+	// キル目標
+	int killCount_ = 10;
+	// 目標達成したかのフラグ
+	bool complete_= false;
 
 	// 敵発生コマンドの待機
 	bool waitFlag = false;
