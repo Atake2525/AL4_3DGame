@@ -17,6 +17,7 @@ enum class Phase {
 // 前方宣言
 class Player;
 class GameScene;
+class RailCamera;
 
 class Enemy {
 public:
@@ -27,7 +28,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity);
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity, float delTime);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -51,7 +52,11 @@ public:
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
+	void SetRailCamera(RailCamera* railCamera) { railCamera_ = railCamera; }
+
 	bool IsDead() { return isDead_; }
+
+	bool IsDelete() { return isDelete_; }
 
 	bool IsDamage() { return isDamage_; }
 
@@ -81,6 +86,10 @@ private:
 	// ゲームシーン
 	GameScene* gameScene_ = nullptr;
 
+	// レールカメラ
+	RailCamera* railCamera_ = nullptr;
+	int moveStage_ = 0;
+
 	uint32_t textureHandle_ = 0;
 
 	// 移動速度
@@ -104,6 +113,10 @@ private:
 
 	// 自キャラ
 	Player* player_ = nullptr;
+
+	// 消滅までの時間
+	float delTime_ = 0.0f;
+	bool isDelete_ = false;
 };
 
 

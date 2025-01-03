@@ -33,6 +33,8 @@ public:
 
 	KamataEngine::Vector3 TranslationAmountVoid(KamataEngine::Vector3 translationPoint, float translationTime);
 
+	int GetMoveStage() { return moveStage_; }
+
 	void Move();
 
 private:

@@ -2,6 +2,8 @@
 #include <cassert>
 #include <3d\AxisIndicator.h>
 #include "fstream"
+#include "imgui.h"
+
 using namespace KamataEngine;
 
 GameScene::GameScene() {}
@@ -79,8 +81,13 @@ void GameScene::Update() {
 	railCamera_->Update();
 	player_->Update();
 	UpdateEnemyPopCommands();
-	enemies_.remove_if([](Enemy* enemy) {
+	for (Enemy* enemy : enemies_) {
 		if (enemy->IsDead()) {
+			killCount++;
+		}
+	}
+	enemies_.remove_if([](Enemy* enemy) {
+		if (enemy->IsDead() || enemy->IsDelete()) {
 			delete enemy;
 			return true;
 		}
@@ -109,6 +116,9 @@ void GameScene::Update() {
 	if (input_->TriggerKey(DIK_0)) {
 		isDebugCameraActive_ = !isDebugCameraActive_;
 	}
+	ImGui::Begin("killCount");
+	ImGui::DragInt("Count", &killCount, 1.0f);
+	ImGui::End();
 #endif // DEBUG
 	if (isDebugCameraActive_) {
 		debugCamera_->Update();
@@ -305,6 +315,7 @@ void GameScene::UpdateEnemyPopCommands() {
 		// 1行分の文字列をストリームに変換して解析しやすくする
 		std::istringstream line_stream(line);
 
+
 		std::string word;
 		// ,区切りで行の先頭文字列を取得
 		std::getline(line_stream, word, ',');
@@ -341,13 +352,21 @@ void GameScene::UpdateEnemyPopCommands() {
 			std::getline(line_stream, word, ',');
 			float velz = (float)std::atof(word.c_str());
 
+			// 消滅までの時間
+			std::getline(line_stream, word, ',');
+			float delTime = (float)std::stof(word.c_str());
+
 			// 敵を発生させる
 			Enemy* enemy = new Enemy();
 			enemy->SetPlayer(player_);
-			enemy->Initialize(modelEnemy_, Vector3{x, y, z}, Vector3{velx, vely, velz});
+			enemy->Initialize(modelEnemy_, Vector3{x, y, z}, Vector3{velx, vely, velz}, delTime);
 			enemy->SetGameScene(this);
+			enemy->SetRailCamera(railCamera_);
 			enemies_.push_back(enemy);
 
+		} else if (word.find("RESTART") == 0) {
+			enemyPopCommands.seekg(0, std::ios_base::beg);
+			break;
 		} else if (word.find("WAIT") == 0) {
 			std::getline(line_stream, word, ',');
 

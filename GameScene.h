@@ -22,6 +22,7 @@
 #include "EnemyBullet.h"
 #include "3d/LightGroup.h"
 #include <sstream>
+#include <iostream>
 #include "Object.h"
 
 /// <summary>
@@ -76,6 +77,8 @@ public: // メンバ関数
 	/// </summary>
 	void UpdateEnemyPopCommands();
 
+	bool IsFinished() const { return finished_; }
+
 private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
 	KamataEngine::Input* input_ = nullptr;
@@ -118,9 +121,14 @@ private: // メンバ変数
 	// 敵発生コマンド
 	std::stringstream enemyPopCommands;
 
+	int killCount = 0;
+
 	// 敵発生コマンドの待機
 	bool waitFlag = false;
 	int32_t waitTimer = 0;
+
+	// 終了
+	bool finished_ = false;
 
 
 	/// <summary>

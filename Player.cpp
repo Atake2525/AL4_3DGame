@@ -55,6 +55,7 @@ void Player::Update() {
 #ifdef _DEBUG
 	ImGui::Begin("PlayerState");
 	ImGui::DragFloat3("pos", &worldTransform_.translation_.x, 0.1f);
+	ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.1f);
 	ImGui::End();
 #endif // _DEBUG
 }
