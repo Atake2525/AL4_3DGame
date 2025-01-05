@@ -81,6 +81,8 @@ public: // メンバ関数
 
 	bool IsComplete() const { return complete_; }
 
+	bool IsDead() const { return dead_; }
+
 private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
 	KamataEngine::Input* input_ = nullptr;
@@ -136,6 +138,7 @@ private: // メンバ変数
 
 	// 終了
 	bool finished_ = false;
+	bool dead_ = false;
 
 
 	/// <summary>

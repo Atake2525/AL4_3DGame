@@ -41,7 +41,7 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetTargetCamera(&camera_);
 
 	// プレイヤーの初期化
-	modelPlayer_ = KamataEngine::Model::CreateFromOBJ("enemy");
+	modelPlayer_ = KamataEngine::Model::CreateFromOBJ("player");
 	player_ = new Player();
 	player_->Initialize(modelPlayer_, &camera_, Vector3{-4.0f, -4.0f, 20.0f});
 
@@ -78,11 +78,17 @@ void GameScene::Initialize() {
 	worldTransform_.Initialize();
 	camera_.farZ = 20000.0f;
 	camera_.Initialize();
+
+	finished_ = false;
+	dead_ = false;
 }
 
 void GameScene::Update() { 
 	railCamera_->Update();
 	player_->Update();
+	if (player_->IsDead()) {
+		dead_ = true;
+	}
 	UpdateEnemyPopCommands();
 	for (Enemy* enemy : enemies_) {
 		if (enemy->IsDead()) {
@@ -196,6 +202,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+	player_->DrawSpeite();
 	object_->DrawSprite();
 
 	// スプライト描画後処理
@@ -229,7 +236,9 @@ void GameScene::CheckAllCollisions() {
 		// 弾と弾の交差判定
 		if (dist <= len) {
 			// 自キャラの衝突時コールバックを呼び出す
-			player_->OnCollision();
+			if (!player_->IsDamage()) {
+				player_->OnCollision();
+			}
 			// 敵弾の衝突時コールバックを呼び出す
 			bullet->OnCollision();
 		}

@@ -77,7 +77,6 @@ private:
 	float damageDelayTime_ = 1.0f;
 	float damageDelayTimer_ = 0.0f;
 
-	float searchDamataDelayTimer_ = 0.0f;
 	// ダメージを受けた時に敵を描画する時間
 	int inDamageDrawCount_ = 1;
 	// カウンター
