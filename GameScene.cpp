@@ -20,6 +20,7 @@ GameScene::~GameScene() {
 	delete skyDome_;
 	delete ground_;
 	delete object_;
+	delete railCamera_;
 }
 
 void GameScene::Initialize() {
@@ -67,6 +68,7 @@ void GameScene::Initialize() {
 
 	object_ = new Object();
 	object_->Initialize();
+	object_->SetRailCamera(railCamera_);
 
 	black_.Initialize();
 	black_.SetColor(Vector4{0.0f, 0.0f, 0.0f, 1.0f});
@@ -99,6 +101,11 @@ void GameScene::Update() {
 	}
 	if (killCounter_ >= killCount_) {
 		complete_ = true;
+	}
+	if (complete_) {
+		if (railCamera_->IsFinish()) {
+			finished_ = true;
+		}
 	}
 	// デスフラグの立った弾を削除
 	enemyBullets_.remove_if([](EnemyBullet* bullet) {
@@ -189,6 +196,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+	object_->DrawSprite();
 
 	// スプライト描画後処理
 	KamataEngine::Sprite::PostDraw();
