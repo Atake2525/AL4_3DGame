@@ -31,6 +31,8 @@ public:
 	/// </summary>
 	void Draw(KamataEngine::Camera& camera);
 
+	void DrawSpeite();
+
 	// 衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
 
@@ -41,6 +43,10 @@ public:
 	void SetParent(const KamataEngine::WorldTransform* parent);
 
 	const KamataEngine::WorldTransform& GetWorldTransform() { return worldTransform_; }
+
+	bool IsDead() const { return isDead_; }
+
+	bool IsDamage() { return isDamage_; }
 
 	// ワールド座標を取得
 	KamataEngine::Vector3 GetWorldPosition();
@@ -53,7 +59,12 @@ private:
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Camera* camera_ = nullptr;
 	KamataEngine::Model* model_ = nullptr;
+	KamataEngine::Model* hpModel_ = nullptr;
 	KamataEngine::ObjectColor objectColor_;
+
+	KamataEngine::Sprite* hpSprite_ = nullptr;
+	uint32_t hptextureHandle_ = 0;
+	KamataEngine::Vector4 hpSpriteColor_;
 
 	KamataEngine::Model* bulletMode_ = nullptr;
 
@@ -82,5 +93,18 @@ private:
 	float delayTimer_ = 0.0f;
 	float delayTime = 0.2f;
 
+	// HP
+	int hp_ = 100;
+	bool isDead_ = false;
+
+	// ダメージ
+	bool isDamage_ = false;
+	float damageDelayTimer_ = 0.0f;
+	float damageDelayTime_ = 1.0f;
+
+	// ダメージを受けた時に敵を描画する時間
+	int inDamageDrawCount_ = 1;
+	// カウンター
+	uint8_t inDamageDrawCounter_ = 0;
 
 };

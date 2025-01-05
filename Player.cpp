@@ -29,12 +29,36 @@ void Player::Initialize(Model* model, KamataEngine::Camera* camera, const Vector
 	objectColor_.Initialize();
 	camera_ = camera;
 	bulletMode_ = Model::CreateFromOBJ("Bullet");
+	hptextureHandle_ = TextureManager::Load("hp.png");
+	hpSpriteColor_ = {255.0f, 0.0f, 0.0f, 1.0f};
+	hpSprite_ = Sprite::Create(hptextureHandle_, Vector2{0.0f, 690.0f}, hpSpriteColor_);
+	delayTimer_ = 0.0f;
+	isDead_ = false;
+	hp_ = 100;
 }
 
 void Player::Update() {
 	wolk();
 	//Rotate();
 	Attack();
+
+	// ダメージを受けたら実行
+	if (isDamage_) {
+		float nowHp = float(100 - hp_);
+		float hpPos = 0 - nowHp;
+		hpSprite_->SetPosition(Vector2{hpPos, 690.0f});
+
+		damageDelayTimer_ += 1.0f / 60 / damageDelayTime_ * 10.0f;
+		if (damageDelayTimer_ >= 10.0f) {
+			isDamage_ = false;
+			damageDelayTimer_ = 0.0f;
+			inDamageDrawCounter_ = 0;
+		}
+		inDamageDrawCounter_ += 1;
+	}
+	if (hp_ <= 0) {
+		isDead_ = true;
+	}
 
 	// デスフラグの立った弾を削除
 	bullets_.remove_if([](PlayerBullet* bullet) {
@@ -127,17 +151,26 @@ void Player::Attack() {
 
 
 void Player::Draw(KamataEngine::Camera& camera) { 
-	model_->Draw(worldTransform_, camera, &objectColor_);
+	if (isDamage_) {
+		if (inDamageDrawCount_ & inDamageDrawCounter_) {
+			model_->Draw(worldTransform_, camera, &objectColor_);
+		}
+	} else {
+		model_->Draw(worldTransform_, camera, &objectColor_);
+	}
 	for (PlayerBullet* bullet : bullets_) {
 		bullet->Draw(camera);
 	}
 }
 
 void Player::OnCollision() { 
-	return; 
+	hp_ -= 20;
+	isDamage_ = true;
 }
 
 void Player::SetParent(const WorldTransform* parent) {
 	// 親関係を結ぶ
 	worldTransform_.parent_ = parent;
 }
+
+void Player::DrawSpeite() { hpSprite_->Draw(); }
