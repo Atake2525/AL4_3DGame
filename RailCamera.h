@@ -41,6 +41,12 @@ public:
 
 	void Move();
 
+	float GetFinishTimer() { return finishTimer_; }
+
+	bool IsComplete() const { return complete_; }
+
+	bool IsFinish() const { return finish_; }
+
 private:
 	GameScene* gameScene_ = nullptr;
 
@@ -85,5 +91,12 @@ private:
 
 	int moveStage_ = 0;
 
+	// 目標完了したときに使用するの変数の宣言
+
 	bool finish_ = false;
+
+	bool complete_ = false;
+
+	float finishTimer_ = 0.0f;
+	float finishTime_ = 4.0f;
 };

@@ -1,5 +1,11 @@
 #pragma once
 #include "input/Input.h"
+#include "base/DirectXCommon.h"
+#include "3d/Model.h"
+#include "2d/Sprite.h"
+#include "3d/WorldTransform.h"
+#include "3d/Camera.h"
+#include "base/TextureManager.h"
 
 class TitleScene {
 public:
@@ -22,4 +28,21 @@ public:
 private:
 	// 終了フラグ
 	bool finished_ = false;
+
+	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
+
+	KamataEngine::WorldTransform worldTransform_;
+	KamataEngine::Camera camera_;
+
+	KamataEngine::Sprite* clearBackGround_ = nullptr;
+	uint32_t textureHandle_ = 0;
+	KamataEngine::Model* gameStartText_ = nullptr;
+	KamataEngine::Model* pushSpaceText_ = nullptr;
+
+	KamataEngine::Vector4 backGroundColor_;
+
+	float timer = 0.0f;
+	float time = 1.0f;
+
+	bool canPush = false;
 };

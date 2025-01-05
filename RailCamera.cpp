@@ -12,10 +12,15 @@ void RailCamera::Initialize(const WorldTransform& worldTransform) {
 	firstPos_ = worldTransform_.translation_;
 	// カメラの初期化
 	camera.Initialize();
+
+	finishTimer_ = 0.0f;
+	translation_ = {0.0f, 0.0f, 0.0f};
+	rotation_ = {0.0f, 0.0f, 0.0f};
+	finish_ = false;
 }
 
 void RailCamera::Update() { 
-	finish_ = gameScene_->IsComplete();
+	complete_ = gameScene_->IsComplete();
 
 	Move();
 
@@ -213,7 +218,7 @@ void RailCamera::ResetAllAmount() {
 }
 
 void RailCamera::Move() { 
-	if (!finish_) {
+	if (!complete_) {
 		if (moveStage_ == 0) {
 			if (translation_.z >= 1770.2f && RotateTranslationAmount(Vector3{0.0f, -90.0f, 0.0f}, Vector3{-1.0f, 0.0f, 0.0f}, 1.0f)) {
 				moveStage_ = 1;
@@ -233,6 +238,28 @@ void RailCamera::Move() {
 			if (translation_.x >= -29.8f && RotateTranslationAmount(Vector3{0.0f, -90.0f, 0.0f}, Vector3{0.0f, 0.0f, 1.0f}, 1.0f)) {
 				moveStage_ = 0;
 				ResetAllAmount();
+			}
+		}
+	} else {
+		if (moveStage_ == 0 && translation_.z >= 1770.2f) {
+			finishTimer_ += 1.0f / 60 / finishTime_;
+			if (finishTimer_ >= 1.0f) {
+				finish_ = true;
+			}
+		} else if (moveStage_ == 1 && translation_.x <= -1770.2f) {
+			finishTimer_ += 1.0f / 60 / finishTime_;
+			if (finishTimer_ >= 1.0f) {
+				finish_ = true;
+			}
+		} else if (moveStage_ == 2 && translation_.z <= 29.8f) {
+			finishTimer_ += 1.0f / 60 / finishTime_;
+			if (finishTimer_ >= 1.0f) {
+				finish_ = true;
+			}
+		} else if (moveStage_ == 3 && translation_.x >= -29.8f) {
+			finishTimer_ += 1.0f / 60 / finishTime_;
+			if (finishTimer_ >= 1.0f) {
+				finish_ = true;
 			}
 		}
 	}
