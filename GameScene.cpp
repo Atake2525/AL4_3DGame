@@ -29,6 +29,11 @@ void GameScene::Initialize() {
 	input_ = KamataEngine::Input::GetInstance();
 	audio_ = KamataEngine::Audio::GetInstance();
 
+	deadSound_ = audio_->LoadWave("dead.wav");
+	damageSound_ = audio_->LoadWave("damage.wav");
+	bgm_ = audio_->LoadWave("Runners_High.wav");
+	audio_->SetVolume(bgm_, 0.02f);
+
 	debugCamera_ = new DebugCamera(1280, 720);
 
 	// 軸方向表示の表示を有効にする
@@ -81,18 +86,36 @@ void GameScene::Initialize() {
 
 	finished_ = false;
 	dead_ = false;
+	playBgm_ = false;
 }
 
 void GameScene::Update() { 
+	if (!playBgm_ && !finished_) {
+		audio_->PlayWave(bgm_);
+		playBgm_ = true;
+	}
 	railCamera_->Update();
 	player_->Update();
-	if (player_->IsDead()) {
-		dead_ = true;
+	if (player_->IsDead() && !deadAnim_) {
+		deadAnim_ = true;
+		audio_->PlayWave(deadSound_);
+	}
+	if (deadAnim_) {
+		deadTimer_ += 1.0f / 60 / deadTime_;
+		if (deadTimer_ >= 1.0f) {
+			deadTimer_ = 0.0f;
+			audio_->StopWave(deadSound_);
+			audio_->StopWave(bgm_);
+			playBgm_ = false;
+			deadAnim_ = false;
+			dead_ = true;
+		}
 	}
 	UpdateEnemyPopCommands();
 	for (Enemy* enemy : enemies_) {
 		if (enemy->IsDead()) {
 			killCounter_++;
+			audio_->PlayWave(deadSound_);
 		}
 	}
 	enemies_.remove_if([](Enemy* enemy) {
@@ -109,7 +132,10 @@ void GameScene::Update() {
 		complete_ = true;
 	}
 	if (complete_) {
-		if (railCamera_->IsFinish()) {
+		if (railCamera_->IsFinish() && !finished_) {
+			audio_->StopWave(deadSound_);
+			audio_->StopWave(bgm_);
+			playBgm_ = false;
 			finished_ = true;
 		}
 	}
@@ -238,6 +264,8 @@ void GameScene::CheckAllCollisions() {
 			// 自キャラの衝突時コールバックを呼び出す
 			if (!player_->IsDamage()) {
 				player_->OnCollision();
+				audio_->PlayWave(damageSound_);
+				audio_->StopWave(damageSound_);
 			}
 			// 敵弾の衝突時コールバックを呼び出す
 			bullet->OnCollision();
@@ -264,6 +292,8 @@ void GameScene::CheckAllCollisions() {
 				// 敵キャラの衝突コールバックを呼び出す
 				if (!enemy->IsDamage()) {
 					enemy->OnCollision();
+					audio_->PlayWave(damageSound_);
+					audio_->StopWave(damageSound_);
 				}
 				// 自弾の衝突コールバックを呼び出す
 				bullet->OnCollision();

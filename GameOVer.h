@@ -6,6 +6,7 @@
 #include "base/DirectXCommon.h"
 #include "base/TextureManager.h"
 #include "input/Input.h"
+#include "audio/Audio.h"
 
 class GameOver {
 public:
@@ -30,6 +31,8 @@ private:
 	bool finished_ = false;
 
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
+	KamataEngine::Audio* audio_ = nullptr;
+	uint32_t buttonSound_ = 0;
 
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Camera camera_;

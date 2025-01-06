@@ -5,6 +5,7 @@
 #include "2d/Sprite.h"
 #include "3d/WorldTransform.h"
 #include "3d/Camera.h"
+#include "audio/Audio.h"
 #include "base/TextureManager.h"
 
 class TitleScene {
@@ -28,6 +29,9 @@ public:
 private:
 	// 終了フラグ
 	bool finished_ = false;
+	KamataEngine::Audio* audio_ = nullptr;
+
+	uint32_t buttonSound_ = 0;
 
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
 

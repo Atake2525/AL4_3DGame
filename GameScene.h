@@ -88,6 +88,11 @@ private: // メンバ変数
 	KamataEngine::Input* input_ = nullptr;
 	KamataEngine::Audio* audio_ = nullptr;
 
+	uint32_t deadSound_ = 0;
+	uint32_t damageSound_ = 0;
+	uint32_t bgm_ = 0;
+	bool playBgm_ = false;
+
 	// デバッグカメラ
 	bool isDebugCameraActive_ = false;
 	KamataEngine::DebugCamera* debugCamera_ = nullptr;
@@ -139,6 +144,9 @@ private: // メンバ変数
 	// 終了
 	bool finished_ = false;
 	bool dead_ = false;
+	bool deadAnim_ = false;
+	float deadTimer_ = 0.0f;
+	float deadTime_ = 0.5f;
 
 
 	/// <summary>
