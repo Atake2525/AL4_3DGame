@@ -7,6 +7,7 @@
 #include "base/TextureManager.h"
 #include "EnemyBullet.h"
 #include <list>
+#include "audio/Audio.h"
 
 // 行動フェーズ
 enum class Phase {
@@ -63,7 +64,7 @@ public:
 private:
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Model* model_ = nullptr;
-
+	KamataEngine::Audio* audio_ = nullptr;
 	KamataEngine::Model* modelBullet_ = nullptr;
 
 	// HP
@@ -109,6 +110,7 @@ private:
 	// 発射タイマー
 	int32_t fireTimer_ = 0;
 	
+	uint32_t deadsound_ = 0;
 
 	// 自キャラ
 	Player* player_ = nullptr;

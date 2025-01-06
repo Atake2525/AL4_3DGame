@@ -4,6 +4,7 @@
 #include "ClearScene.h"
 #include "GameOVer.h"
 
+
 using namespace KamataEngine;
 
 // シーン(型)
@@ -40,7 +41,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
-	win->CreateGameWindow();
+	win->CreateGameWindow(L"LE2C_06_オオタケ_アオイ_トンネル");
 
 	// DirectX初期化処理
 	dxCommon = DirectXCommon::GetInstance();

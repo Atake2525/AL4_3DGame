@@ -6,6 +6,7 @@
 #include "3d/WorldTransform.h"
 #include "3d/Camera.h"
 #include "base/TextureManager.h"
+#include "audio/Audio.h"
 
 class ClearScene {
 public:
@@ -27,6 +28,8 @@ public:
 
 private:
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
+	KamataEngine::Audio* audio_ = nullptr;
+	uint32_t buttonSound_ = 0;
 
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Camera camera_;

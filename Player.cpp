@@ -23,6 +23,8 @@ Vector3 Player::GetWorldPosition() {
 
 void Player::Initialize(Model* model, KamataEngine::Camera* camera, const Vector3& position) {
 	input_ = KamataEngine::Input::GetInstance();
+	audio_ = Audio::GetInstance();
+	shotSound_ = audio_->LoadWave("shot.wav");
 	model_ = model;
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
@@ -30,8 +32,7 @@ void Player::Initialize(Model* model, KamataEngine::Camera* camera, const Vector
 	camera_ = camera;
 	bulletMode_ = Model::CreateFromOBJ("Bullet");
 	hptextureHandle_ = TextureManager::Load("hp.png");
-	hpSpriteColor_ = {255.0f, 0.0f, 0.0f, 1.0f};
-	hpSprite_ = Sprite::Create(hptextureHandle_, Vector2{0.0f, 690.0f}, hpSpriteColor_);
+	hpSprite_ = Sprite::Create(hptextureHandle_, Vector2{0.0f, 690.0f});
 	delayTimer_ = 0.0f;
 	isDead_ = false;
 	hp_ = 100;
@@ -125,7 +126,7 @@ void Player::Rotate() {
 
 void Player::Attack() {
 	if (input_->PushKey(DIK_SPACE) && !isAttack_) {
-
+		audio_->PlayWave(shotSound_);
 		// 弾の速度
 		const float kBulletSpeed = 2.0f;
 		Vector3 velocity(0, 0, kBulletSpeed);
@@ -145,13 +146,14 @@ void Player::Attack() {
 		if (delayTimer_ >= delayTime) { 
 			isAttack_ = false; 
 			delayTimer_ = 0.0f;
+			audio_->StopWave(shotSound_);
 		}
 	}
 }
 
 
 void Player::Draw(KamataEngine::Camera& camera) { 
-	if (isDamage_) {
+	if (isDamage_ && !isDead_) {
 		if (inDamageDrawCount_ & inDamageDrawCounter_) {
 			model_->Draw(worldTransform_, camera, &objectColor_);
 		}

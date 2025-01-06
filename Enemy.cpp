@@ -21,10 +21,10 @@ Vector3 Enemy::GetWorldPosition() {
 void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& velocity, float delTime) { 
 	assert(model);
 	model_ = model;
-
+	audio_ = Audio::GetInstance();
 	textureHandle_ = TextureManager::Load("uvChecker.png");
 	modelBullet_ = Model::CreateFromOBJ("Bullet");
-
+	deadsound_ = audio_->LoadWave("dead.wav");
 	delTime_ = delTime;
 
 	ApproachVelocity = velocity;
@@ -56,7 +56,9 @@ void Enemy::Update() {
 	}
 
 	// HPが0になったら実行
-	if (hp_ <= 0) {
+	if (hp_ <= 0 && !isDead_) {
+		audio_->PlayWave(deadsound_);
+		audio_->StopWave(deadsound_);
 		isDead_ = true;
 	}
 	//worldTransform_.translation_ -= velocity_;

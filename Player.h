@@ -9,6 +9,7 @@
 #include "kMath.h"
 #include "PlayerBullet.h"
 #include <list>
+#include "audio/Audio.h"
 
 class PlayerBullet;
 
@@ -61,16 +62,18 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 	KamataEngine::Model* hpModel_ = nullptr;
 	KamataEngine::ObjectColor objectColor_;
+	KamataEngine::Audio* audio_ = nullptr;
 
 	KamataEngine::Sprite* hpSprite_ = nullptr;
 	uint32_t hptextureHandle_ = 0;
-	KamataEngine::Vector4 hpSpriteColor_;
 
 	KamataEngine::Model* bulletMode_ = nullptr;
 
 	void Move();
 	void wolk();
 	void Rotate();
+
+	uint32_t shotSound_ = 0;
 
 
 	// キャラクターの速さ

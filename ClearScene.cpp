@@ -10,6 +10,8 @@ using namespace KamataEngine;
 void ClearScene::Initialize() { 
 	finished_ = false;
 	dxCommon_ = KamataEngine::DirectXCommon::GetInstance();
+	audio_ = Audio::GetInstance();
+	buttonSound_ = audio_->LoadWave("button.wav");
 
 	textureHandle_ = TextureManager::Load("clearSprite.png");
 	backGroundColor_ = {0.0f, 0.0f, 0.0f, 1.0f};
@@ -38,7 +40,9 @@ void ClearScene::Update() {
 		canPush = true;
 	}
 	if (canPush) {
-		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			audio_->PlayWave(buttonSound_);
+			audio_->StopWave(buttonSound_);
 			finished_ = true;
 		}
 	}
