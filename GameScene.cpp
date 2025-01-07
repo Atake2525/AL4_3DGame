@@ -91,7 +91,7 @@ void GameScene::Initialize() {
 
 void GameScene::Update() { 
 	if (!playBgm_ && !finished_) {
-		audio_->PlayWave(bgm_);
+		audio_->PlayWave(bgm_, 0.3f);
 		playBgm_ = true;
 	}
 	railCamera_->Update();
@@ -102,10 +102,13 @@ void GameScene::Update() {
 	}
 	if (deadAnim_) {
 		deadTimer_ += 1.0f / 60 / deadTime_;
+		audio_->StopWave(deadSound_);
 		if (deadTimer_ >= 1.0f) {
 			deadTimer_ = 0.0f;
-			audio_->StopWave(deadSound_);
-			audio_->StopWave(bgm_);
+			//while (!audio_->IsPlaying(bgm_)) {
+				//audio_->StopWave(bgm_);
+				//audio_->PauseWave(bgm_);
+			//}
 			playBgm_ = false;
 			deadAnim_ = false;
 			dead_ = true;
@@ -134,7 +137,7 @@ void GameScene::Update() {
 	if (complete_) {
 		if (railCamera_->IsFinish() && !finished_) {
 			audio_->StopWave(deadSound_);
-			audio_->StopWave(bgm_);
+			//audio_->PauseWave(bgm_);
 			playBgm_ = false;
 			finished_ = true;
 		}
